@@ -1,5 +1,9 @@
-Please replace the contents of this file with relevant instructions for your repository or remove this file entirely.
+This repository contains the complete codebase used for the experiments. The code is organized as follows:
 
-This directory would generally contain source code files that contain the core code to implement the method and various utility/auxiliary functions.
+- **display**: Contains utility functions for visualizing results.
+- **inference**: Implements the MCMC inference algorithm described in the article.
+- **models**: Includes the implementation of the proposed models.
+- **sampling**: Provides sampling methods for both the CRM and the network.
+- **utils**: Offers various utility functions.
 
-Scripts/code files that execute the overall workflow to carry out an analysis and generate results for the manuscript might be placed in the main directory.
+Additionally, we provide notebooks with minimal examples demonstrating how to use the code.
