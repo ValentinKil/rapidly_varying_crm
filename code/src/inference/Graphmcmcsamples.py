@@ -7,7 +7,7 @@ import src.inference.RapidCRM_Graphmcmc as rapid_Graphmcmc
 #from src.inference import GGP_Graphmcmc
 
 
-def graphmcmcsamples(objmcmc, G, optional_arg=None,true_value=None,initial_value=None,output_dir=None ,verbose=True):
+def graphmcmcsamples(objmcmc, G, optional_arg=None,true_value=None,initial_value=None,output_dir=None,verbose=True):
     """
     Perform a Markov Chain Monte Carlo (MCMC) algorithm on the data assuming the graph model and specifications contained in the graphmcmc object.
 

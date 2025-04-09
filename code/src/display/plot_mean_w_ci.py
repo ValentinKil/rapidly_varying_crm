@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-def plot_mean_w_ci(G, objmcmc, w_true=None, nburn=0, fontsize=14, plot_folder=None):
+def plot_mean_w_ci(G, objmcmc, w_true=None, nburn=0, fontsize=14, plot_folder=None,dpi=300,figsize=(8, 6)):
     """
     Plot credible intervals for the sociability parameters (weights) of nodes in a graph.
     This function visualizes the credible intervals for the weights of nodes in a graph, 
@@ -51,14 +51,12 @@ def plot_mean_w_ci(G, objmcmc, w_true=None, nburn=0, fontsize=14, plot_folder=No
 
     
     degree = np.array(np.sum(G, axis=0) + np.sum(G, axis=1).T).squeeze()/2
-    print(degree)
     ind = np.argsort(degree)[::-1]  # Sorted by descending degree
-    print(ind)
     nnodes=G.shape[0]
     # mean_w_true = np.mean(w_true)
 
     # High degree nodes
-    plt.figure(dpi=300,figsize=(8, 6))
+    plt.figure(dpi=dpi,figsize=figsize)
     plt.title('Credible intervals - high degree nodes',fontsize=fontsize+2)
     plt.xlabel('Index of node (sorted by dec. degree)', fontsize=fontsize)
     plt.ylabel('Sociability parameters', fontsize=fontsize)
@@ -81,18 +79,18 @@ def plot_mean_w_ci(G, objmcmc, w_true=None, nburn=0, fontsize=14, plot_folder=No
     ax = plt.gca()
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
-    plt.legend(fontsize=fontsize-2, loc='lower left')
+    plt.legend(fontsize=fontsize-2, loc='upper right')
     plt.tight_layout()
     if plot_folder is not None:
         plot_path = os.path.join(plot_folder, f'w_highdeg.png')
-        plt.savefig(plot_path, dpi=300)
+        plt.savefig(plot_path, dpi=dpi)
     plt.show()
     plt.close()
 
  
 
     # Low degree nodes
-    plt.figure(dpi=300,figsize=(8, 6))
+    plt.figure(dpi=dpi,figsize=figsize)
     plt.title('Credible intervals - low degree nodes',fontsize=fontsize+2)
     plt.xlabel('Nodes', fontsize=fontsize)
     plt.ylabel('Log sociability parameters', fontsize=fontsize)
@@ -104,10 +102,7 @@ def plot_mean_w_ci(G, objmcmc, w_true=None, nburn=0, fontsize=14, plot_folder=No
         ind2 = np.where((w_true>0) & (degree==1))[0]
     else :
         ind2 = np.where((degree==1))[0]
-    print(ind2)
-    max_node2 = len(ind2)
     last = np.random.choice(ind2, 50)# range(max(0, max_node2 - 50), max_node2)
-    print(last)
     for j in range(len(last)):
         i=last[j]
         samples_w = np.array([objmcmc.samples[j]["w"][nburn:,ind[i]] for j in range(objmcmc.settings["nchains"])])
@@ -121,7 +116,7 @@ def plot_mean_w_ci(G, objmcmc, w_true=None, nburn=0, fontsize=14, plot_folder=No
     ax.spines['right'].set_visible(False)
     if plot_folder is not None:
         plot_path = os.path.join(plot_folder, f'w_lowdeg.png')
-        plt.savefig(plot_path, dpi=300)
+        plt.savefig(plot_path, dpi=dpi)
     plt.show()
     plt.close()
  

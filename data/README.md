@@ -1,9 +1,7 @@
-Please replace the contents of this file with relevant instructions for your repository or remove this file entirely.
+We consider 3 different datasets, which have been download from [Konect](https://konect.cc) and [Network Repository](https://networkrepository.com), all are indirected graphs.
 
-This directory would generally contain the real data files (or facsimile versions of them in place of confidential data) and simulated data files.
 
-Cleaned data that are produced by processing raw input data might also be placed here.
+- **Flickr:** A crawl of Flickr, a platform for sharing photos and videos. (https://socialnetworks.mpi-sws.org/data-imc2007.html). Note that this dataset is too big to be put on Github, we provide a compressed version. 
+- **Douban:** A crawl of Douban, an online social network that provides user review and recommendation services for films, books, and music.The dataset contains all links among users. (https://networkrepository.com/soc-douban.php).
+- **TwitterCrawl:** A crawl of Twitter, where nodes represent users and edges correspond to retweets collected from various social and political hashtags. (https://networkrepository.com/rt-retweet-crawl.php).
 
-Code to generate the simulated data and (if relevant) and facsimile data provided in place of confidential real data might also be placed here. 
-
-Code for data cleaning could potentially also be placed here rather than in `code`.

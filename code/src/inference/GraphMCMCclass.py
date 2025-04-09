@@ -1,5 +1,5 @@
 from src.models import GraphModelclass
-from src.inference.ConvertArviZ import to_arviz
+from src.utils.ConvertArviZ import to_arviz
 import numpy as np
 
 

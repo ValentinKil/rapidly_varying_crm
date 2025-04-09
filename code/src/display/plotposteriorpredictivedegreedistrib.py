@@ -5,11 +5,10 @@ import os
 
 from src.display.plotdegreedistribut import plot_degree
 from src.models.RapidCRMclass import RapidCRM
-from src.models.GGPclass import GGP
 from src.sampling.CaronFoxGraph_rnd import CRMtoGraph
 
 
-def plot_posterior_predictive_degree(objmcmc,nburn,niter,thin, G=None,p=None, ndraws=2000, bins=16, N=10**5,plot_folder=None,fontsize=16,legend=True):
+def plot_posterior_predictive_degree(objmcmc,nburn,niter,thin, G=None,p=None, ndraws=2000, bins=16, N=10**5,plot_folder=None,fontsize=16,legend=True,dpi=300, figsize=(6, 8),xlim=(0, 2*10**3),ylim=(8*10**(-8),1)):
     """
     Plots the posterior predictive degree distribution for a given MCMC object.
     This function generates degree distributions from posterior predictive samples
@@ -71,13 +70,13 @@ def plot_posterior_predictive_degree(objmcmc,nburn,niter,thin, G=None,p=None, nd
             eta_samples = np.array([objmcmc.samples[i]["eta"][idx] for i, idx in zip(index, INDEX)])*(1-p)/p
         Arg = tuple(zip(np.ones(ndraws),np.zeros(ndraws),beta_samples,c_samples,eta_samples))
         typeCRM = RapidCRM
-    elif objmcmc.prior.type == 'GGP':
-        print("GGP")
-        alpha_samples = np.array([objmcmc.samples[i]["alpha"][idx] for i, idx in zip(index, INDEX)])
-        tau_samples = np.array([objmcmc.samples[i]["tau"][idx] for i, idx in zip(index, INDEX)])
-        sigma_samples = np.array([objmcmc.samples[i]["sigma"][idx] for i, idx in zip(index, INDEX)])
-        Arg= tuple(zip(sigma_samples,tau_samples,np.ones(ndraws),alpha_samples))
-        typeCRM = GGP
+    # elif objmcmc.prior.type == 'GGP':
+    #     print("GGP")
+    #     alpha_samples = np.array([objmcmc.samples[i]["alpha"][idx] for i, idx in zip(index, INDEX)])
+    #     tau_samples = np.array([objmcmc.samples[i]["tau"][idx] for i, idx in zip(index, INDEX)])
+    #     sigma_samples = np.array([objmcmc.samples[i]["sigma"][idx] for i, idx in zip(index, INDEX)])
+    #     Arg= tuple(zip(sigma_samples,tau_samples,np.ones(ndraws),alpha_samples))
+    #     typeCRM = GGP
     else:
         raise ValueError(f"Unknown type of graph {objmcmc.prior.typegraph}")
     
@@ -107,7 +106,7 @@ def plot_posterior_predictive_degree(objmcmc,nburn,niter,thin, G=None,p=None, nd
         emp_centerbins, emp_freq, emp_deg = plot_degree(G, bins=bins, display=False)
 
     # Plot posterior predictive intervals
-    fig, ax = plt.subplots(dpi=300, figsize=(6, 8))
+    fig, ax = plt.subplots(dpi=dpi, figsize=figsize)
     ax.fill_between(centerbins, quantile_freq[0, :], quantile_freq[1, :], color='lightblue', label='95% posterior predictive')
     ax.set_xscale('log')
     ax.set_yscale('log')
@@ -120,8 +119,8 @@ def plot_posterior_predictive_degree(objmcmc,nburn,niter,thin, G=None,p=None, nd
     ax.spines['top'].set_visible(False)
     ax.spines['right'].set_visible(False)
     ax.set_xlabel('Degree (log scale)', fontsize=fontsize)
-    ax.set_xlim(0, 2*10**3)
-    ax.set_ylim(8*10**(-8),1)
+    ax.set_xlim(xlim)
+    ax.set_ylim(ylim)
     ax.set_ylabel('Frequency (log scale)', fontsize=fontsize)
     ax.set_title('Posterior predictive degree distribution', fontsize=fontsize+2)
     # Add text annotation
@@ -133,6 +132,5 @@ def plot_posterior_predictive_degree(objmcmc,nburn,niter,thin, G=None,p=None, nd
         plt.legend(fontsize=fontsize)
     if plot_folder is not None:
         plot_path = os.path.join(plot_folder, f'posteriorDegree.png')
-        plt.savefig(plot_path, dpi=300)
+        plt.savefig(plot_path, dpi=dpi)
     plt.show()
-    plt.close()
