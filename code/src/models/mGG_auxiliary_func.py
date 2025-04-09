@@ -1,5 +1,5 @@
 # ----------------------------------------------
-# Auxiliary functions for the RapidCRM class
+# Auxiliary functions for the mGG class
 # ----------------------------------------------
 import numpy as np
 import scipy.integrate as integrate
@@ -63,15 +63,16 @@ def lexp_can_inv(alpha, tau, y, tol=1e-10):
 
     else:
         # Else we need to use a Newton method
-        warnings.warn("Warning: when tau != 0 the inverse is computed with a Newton method", UserWarning)
-        def equation_to_solve(t, y_i): return RapidCRMpsi_can(
+        warnings.warn(
+            "Warning: when tau != 0 the inverse is computed with a Newton method", UserWarning)
+        def equation_to_solve(t, y_i): return mGGpsi_can(
             t, alpha, tau) - y_i
         t_guess = np.zeros_like(y)
         result = newton(equation_to_solve, t_guess, args=(y,))
         return np.array(result)
 
 
-def RapidCRMpsi_can(t, alpha, tau):
+def mGGpsi_can(t, alpha, tau):
     """
     Compute the Laplace exponent in the canonical case.
 
@@ -105,7 +106,7 @@ def RapidCRMpsi_can(t, alpha, tau):
     return result
 
 
-def RapidCRMpsi(t, alpha, tau, beta, c, eta):
+def mGGpsi(t, alpha, tau, beta, c, eta):
     """
     Compute the Laplce exponent in the general case.
 
@@ -120,12 +121,12 @@ def RapidCRMpsi(t, alpha, tau, beta, c, eta):
 
     Returns:
     ---------
-        float or array-like: The computed RapidCRMpsi value.
+        float or array-like: The computed mGGpsi value.
     """
-    return eta*(RapidCRMpsi_can(beta+c*t, alpha, tau)-RapidCRMpsi_can(np.array(beta), alpha, tau))
+    return eta*(mGGpsi_can(beta+c*t, alpha, tau)-mGGpsi_can(np.array(beta), alpha, tau))
 
 
-def RapidCRMpsi1(t, alpha, tau, beta,c):
+def mGGpsi1(t, alpha, tau, beta, c):
     """
     Compute the Laplace exponent in the general case, when eta is fixed to 1.
 
@@ -138,6 +139,6 @@ def RapidCRMpsi1(t, alpha, tau, beta,c):
         c (float) : The c parameter 
     Returns:
     --------
-        float or array-like: The computed RapidCRMpsi1 value.
+        float or array-like: The computed mGGpsi1 value.
     """
-    return RapidCRMpsi(t, alpha, tau, beta, c, 1)
+    return mGGpsi(t, alpha, tau, beta, c, 1)

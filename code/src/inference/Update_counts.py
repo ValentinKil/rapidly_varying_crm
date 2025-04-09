@@ -1,10 +1,9 @@
-# The functions that update the latent counts n are common to the MCMC algorithm for GGP and for RapidCRM
+# The functions that update the latent counts n are common to the MCMC algorithm for GG and for mGG
 
 import numpy as np
 import scipy.stats as stats
 from scipy.special import gammaln
 from scipy.sparse import coo_matrix
-
 
 
 def update_n_Gibbs(logw, K, ind1, ind2):
@@ -34,8 +33,7 @@ def update_n_Gibbs(logw, K, ind1, ind2):
     d = tpoissrnd(np.exp(lograte_poi))
 
     # Update the count matrix
-    count=coo_matrix((d, (ind1, ind2)), shape=(K, K))
-    
+    count = coo_matrix((d, (ind1, ind2)), shape=(K, K))
 
     # Calculate the total counts for each cluster
     N = np.array(count.sum(axis=0) + count.sum(axis=1).T)[0]
@@ -61,6 +59,7 @@ def tpoissrnd(lambda_):
     x[ind] = stats.poisson.ppf(np.exp(-lambda_ind) + np.random.rand(
         *lambda_ind.shape) * (1 - np.exp(-lambda_ind)), lambda_ind)
     return x
+
 
 def update_n_MH(logw, d, K, count, ind1, ind2, nbMH):
     """
@@ -90,7 +89,8 @@ def update_n_MH(logw, d, K, count, ind1, ind2, nbMH):
         dprop = d.copy()
         dprop[ind] = 2
         if np.sum(~ind) > 0:
-            dprop[~ind] = dprop[~ind] + 2 * np.random.randint(1, 3, size=np.sum(~ind)) - 3
+            dprop[~ind] = dprop[~ind] + 2 * \
+                np.random.randint(1, 3, size=np.sum(~ind)) - 3
 
         logqprop = np.zeros_like(ind, dtype=float)
         logqprop[~ind] = np.log(0.5)
@@ -101,15 +101,14 @@ def update_n_MH(logw, d, K, count, ind1, ind2, nbMH):
             logq[~indbis] = np.log(0.5)
 
         diff_d = dprop - d
-        logaccept_d = (diff_d * lograte_poi 
+        logaccept_d = (diff_d * lograte_poi
                        - gammaln(dprop + 1) + gammaln(d + 1)
                        - logqprop + logq)
-        
+
         indaccept = (np.log(np.random.rand(*logaccept_d.shape)) < logaccept_d)
         d[indaccept] = dprop[indaccept]
     # Update the count matrix
-    count=coo_matrix((d, (ind1, ind2)), shape=(K, K))
+    count = coo_matrix((d, (ind1, ind2)), shape=(K, K))
     # Calculate the total counts for each cluster
     N = np.array(count.sum(axis=0) + count.sum(axis=1).T)[0]
     return N, d, count
-

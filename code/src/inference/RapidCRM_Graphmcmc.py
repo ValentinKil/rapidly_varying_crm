@@ -4,10 +4,9 @@ from collections import defaultdict
 from tqdm import tqdm
 
 
-import src.inference.RapidCRM_Update_functions as rapid_up_func
-from src.inference import RapidCRM_Update_param
+import src.inference.mGG_Update_functions as rapid_up_func
+from src.inference import mGG_Update_param
 from src.inference import Update_counts
-
 
 
 def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
@@ -289,7 +288,7 @@ def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
 
     if verbose:
         print("-------------------------------")
-        print("Start MCMC for RapidCRM graphs")
+        print("Start MCMC for mGG graphs")
         print(f"Nb of nodes:", K, "- Nb of edges:", G_upper.sum() / 2)
         print("Estimate beta: ", estimate_beta, "- Estimate eta:",
               estimate_eta, "- Estimate c:", estimate_c)
@@ -323,7 +322,7 @@ def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
             ))
 
         # Update weights using Hamiltonian Monte Carlo
-        if estimate_w :
+        if estimate_w:
             #
             epsilon_w_st[i] = epsilon_w
 
@@ -338,7 +337,7 @@ def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
                 epsilon_w = np.exp(np.log(epsilon_w) +
                                    0.005 * (current_rate_w - 0.65))
 
-        if estimate_s :
+        if estimate_s:
             epsilon_s_st[i] = epsilon_s
 
             s, u, rate_s[i], logratio_s[i], _, _, _ = rapid_up_func.update_s(
@@ -356,13 +355,12 @@ def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
         # Update w_rem and hyperparameters using Metropolis-Hastings
         # Half of the time alpha is update using Random Walk Metropolis Hasting
 
-        
         if i % 2 == 0:
             rw_eta = True
         else:
             rw_eta = False
 
-        w_rem, alpha, tau, beta, c, eta, rate2[i] = RapidCRM_Update_param.update_hyper(
+        w_rem, alpha, tau, beta, c, eta, rate2[i] = mGG_Update_param.update_hyper(
             w, s, w_rem, alpha, tau, beta, c, eta, hyper_MH_nb, hyper_rw_std, estimate_beta, modelparam["beta"], estimate_c, modelparam["c"], estimate_eta, modelparam["eta"], rw_eta, estimate_w_rem, nmass)
 
         # Update of the count
@@ -374,7 +372,7 @@ def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
 
         # if i == 10:
             # print("-------------------------------")
-            # print("Start MCMC for RapidCRM graphs")
+            # print("Start MCMC for mGG graphs")
             # print(f"Nb of nodes:", K, "- Nb of edges:", G_upper.sum()/2)
             # print("Estimate beta: ",estimate_beta,"- Estimate eta:",estimate_eta,"- Estimate c:", estimate_c)
             # print("Estimate count:", estimate_count,"- Estimate weights:",estimate_w," - Estimate s:",estimate_s, "- Estimate w_rem:",estimate_w_rem)
@@ -427,7 +425,7 @@ def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
     }
 
     print("-------------------------------")
-    print("End MCMC for RapidCRM graphs")
+    print("End MCMC for mGG graphs")
     print("-------------------------------")
 
     return samples, stats, last

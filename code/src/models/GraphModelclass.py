@@ -38,7 +38,7 @@ class GraphModel:
             self.param['p'] = args[1]
             self.name = 'Erdos-Renyi'
 
-        elif self.type == 'GGP':
+        elif self.type == 'GG':
             self.name = 'Generalized gamma process'
             self.param['alpha'] = args[0]
             self.param['sigma'] = args[1]

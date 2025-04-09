@@ -109,19 +109,19 @@ def generalized_inverse(f, x, method='brentq', tol=1e-16):
 def gammainc_up(a,z):
     '''Computes the upper incomplete gamma function for given parameters.
 
-    The upper incomplete gamma function is defined as:
-        Γ(a, z) = ∫[z, ∞] t^(a-1) e^(-t) dt
+     The upper incomplete gamma function is defined as:
+         Γ(a, z) = ∫[z, ∞] t^(a-1) e^(-t) dt
 
-    Args:
-    ----------
-        a (float): The shape parameter of the gamma function.
-        z (float or array-like): The lower limit of integration. Can be a single value or an array of values.
+     Args:
+     ----------
+         a (float): The shape parameter of the gamma function.
+         z (float or array-like): The lower limit of integration. Can be a single value or an array of values.
         
-    Returns:
-    ----------
-        float or numpy.ndarray: The computed upper incomplete gamma function value(s).'''
+     Returns:
+     ----------
+         float or numpy.ndarray: The computed upper incomplete gamma function value(s).'''
     try :
         return float(mp.gammainc(a,z))
     except:
         return np.asarray([mp.gammainc(a, zi, regularized=False)
-                       for zi in z]).astype(float)
+                        for zi in z]).astype(float)

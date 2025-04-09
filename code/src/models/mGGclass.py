@@ -3,14 +3,13 @@ from scipy.special import gamma
 import warnings
 
 from src.models import CRMclass
-from src.models.RapidCRM_auxiliary_func import RapidCRMpsi_can, levy_can, RapidCRMpsi
-from src.sampling.RapidCRM_size_biased_rnd import RapidCRM_size_biased_sampling
+from src.models.mGG_auxiliary_func import mGGpsi_can, levy_can, mGGpsi
+from src.sampling.mGG_size_biased_rnd import mGG_size_biased_sampling
 from src.utils import LambertW
 np_lambertw = LambertW.lambertw_iacono_np
 
 
-
-class RapidCRM(CRMclass.CRM):
+class mGG(CRMclass.CRM):
     """
     This class represents a Rapidly Varying CRM as described in the note.
 
@@ -36,10 +35,10 @@ class RapidCRM(CRMclass.CRM):
         self.eta = eta
 
     def lexp_can(self, t):
-        return RapidCRMpsi_can(t, self.alpha, self.tau)
+        return mGGpsi_can(t, self.alpha, self.tau)
 
     def lexp(self, t):
-        return RapidCRMpsi(t, self.alpha, self.tau, self.beta, self.c, self.eta)
+        return mGGpsi(t, self.alpha, self.tau, self.beta, self.c, self.eta)
 
     def levy_can(self, w):
         return levy_can(self.alpha, self.tau, w)
@@ -54,7 +53,7 @@ class RapidCRM(CRMclass.CRM):
         Args:
         -------
             w_values : array-like : input values.
-            
+
         Returns:
         -------
             array-like : Levy intensity of the CRM for each input value.
@@ -74,7 +73,7 @@ class RapidCRM(CRMclass.CRM):
         -------
             array-like : sampled weights.
         """
-        return RapidCRM_size_biased_sampling(self.alpha, self.tau, self.beta, self.c, self.eta, n)
+        return mGG_size_biased_sampling(self.alpha, self.tau, self.beta, self.c, self.eta, n)
 
     def const(self):
         """
@@ -91,7 +90,7 @@ class RapidCRM(CRMclass.CRM):
 
     def AsympNbNodes(self, t):
         """
-        Calculates the asymptotic number of nodes for the RapidCRM.
+        Calculates the asymptotic number of nodes for the mGG.
 
         Args:
         -------
@@ -105,7 +104,7 @@ class RapidCRM(CRMclass.CRM):
 
     def EspTotal(self):
         """
-        Calculates the total expectation of the RapidCRM.
+        Calculates the total expectation of the mGG.
 
         Returns:
         -------
@@ -118,26 +117,23 @@ class RapidCRM(CRMclass.CRM):
 
     def VarTotal(self):
         """
-        Calculates the total variance of the RapidCRM.
+        Calculates the total variance of the mGG.
 
         Returns:
         -------
             float : total variance.
         """
         if self.alpha != 1 or self.tau != 0:
-            warnings.warn("Attention, implemented only for alpha=1 and tau=0", UserWarning)
+            warnings.warn(
+                "Attention, implemented only for alpha=1 and tau=0", UserWarning)
         if self.beta == 1:
             return self.eta*self.c**2/6
         else:
             return self.eta*self.c**2*(((self.beta+1)*np.log(self.beta+2*(1-self.beta)))/(self.beta**2*np.log(self.beta)**3))
-        
-    def rhobarinvasympt(self,t):
-        if self.alpha==1:
+
+    def rhobarinvasympt(self, t):
+        if self.alpha == 1:
             return self.eta*self.c/(1-self.tau)/t/np.log(t)**2
         else:
-            C=self.eta*self.c**self.alpha/(self.alpha-self.tau)/gamma(1-self.alpha)
-            return (-self.alpha*C/t/np_lambertw(-self.alpha*C/t,k=-1))**(1/self.alpha)
-            
-        
-        
-        
+            C = self.eta*self.c**self.alpha/(self.alpha-self.tau)/gamma(1-self.alpha)
+            return (-self.alpha*C/t/np_lambertw(-self.alpha*C/t, k=-1))**(1/self.alpha)
