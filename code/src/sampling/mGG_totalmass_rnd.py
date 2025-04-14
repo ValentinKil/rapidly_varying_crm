@@ -3,7 +3,7 @@ from src.utils import Etstable as etstb
 from src.utils import Etstable_accelerated as etstb_acc
 
 
-def Rapidsumrnd(alpha, tau, beta, c, eta, n):
+def mGGsumrnd(alpha, tau, beta, c, eta, n):
     """
     Compute the total mass of a Rapidly Varying CRM.
 
@@ -33,9 +33,9 @@ def Rapidsumrnd(alpha, tau, beta, c, eta, n):
             X = etstb_acc.etstablernd(eta/n, s[i], beta)
         except (RuntimeWarning, ValueError, ZeroDivisionError):
             print("Acceleration failled")
-            print("eta/n=",eta/n)
-            print("s[i]=",s[i])
-            print("beta=",beta)
+            print("eta/n=", eta/n)
+            print("s[i]=", s[i])
+            print("beta=", beta)
             X = etstb.etstablernd(eta/n, s[i], beta)
         # Toreturn +=b[i]*X
         Toreturn += X

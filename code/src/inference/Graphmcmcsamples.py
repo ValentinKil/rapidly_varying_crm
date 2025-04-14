@@ -72,7 +72,7 @@ def graphmcmcsamples(objmcmc, G, optional_arg=None, true_value=None, initial_val
                 # print("-----------------------------------")
                 # print(f"           MCMC chain {k}/{objmcmc.settings.nchains} decoupling version        ")
                 nmass = optional_arg["nmass"]
-                samples, stats, last = rapid_Graphmcmc.Rapidgraphmcmc(
+                samples, stats, last = rapid_Graphmcmc.mGG_graphmcmc(
                     G, objmodel.param, objmcmc.settings, objmodel.typegraph, nmass, true_value, initial_value, verbose=verbose)
 
                 with open(os.path.join(dest_unique_name, f'{unique_name}_samples_{k}.pkl'), 'wb') as f:

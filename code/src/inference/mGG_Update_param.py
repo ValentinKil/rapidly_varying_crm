@@ -77,7 +77,7 @@ def update_hyper(w, s, w_rem, alpha, tau, beta, c, eta, nbMH, rw_std, estimate_b
 
         # Estimate of w_rem
         if estimate_w_rem:
-            wprop_rem = mGG_totalmass_rnd.Rapidsumrnd(
+            wprop_rem = mGG_totalmass_rnd.mGGsumrnd(
                 alpha, tau, betaprop + 2 * cprop * sum_w + 2 * cprop * w_rem, cprop, etaprop, nmass)
         else:
             wprop_rem = w_rem

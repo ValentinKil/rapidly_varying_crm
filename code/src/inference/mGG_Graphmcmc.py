@@ -9,8 +9,8 @@ from src.inference import mGG_Update_param
 from src.inference import Update_counts
 
 
-def Rapidgraphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
-                   true_value=None, initial_value=None, verbose=True):
+def mGG_graphmcmc(G, modelparam, mcmcparam, typegraph, nmass,
+                  true_value=None, initial_value=None, verbose=True):
     """
     Perform Markov Chain Monte Carlo (MCMC) inference for a Rapidly Varying graph model.
 
